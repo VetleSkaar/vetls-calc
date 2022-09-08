@@ -73,8 +73,17 @@ public class Calc {
      * @throws IllegalStateException if the operand stack is empty
      */
     public double performOperation(UnaryOperator<Double> op) throws IllegalStateException {
-        // TODO
-        return 0.0;
+        if (getOperandCount() < 2) {
+            throw new IllegalStateException("Only " + getOperandCount() + " on the stack");
+        }
+
+        var op2 = popOperand();
+        var op1 = popOperand();
+
+        var result = op.apply(op1, op2);
+        pushOperand(result);
+
+        return result;
     }
 
     /**
@@ -102,7 +111,15 @@ public class Calc {
      * @throws IllegalStateException if the operand count is less than two
      */
     public void swap() {
-        // TODO        
+        if (getOperandCount() < 2) {
+            throw new IllegalStateException("Too few operands (" + getOperandCount() + ") on the stack");
+        }
+
+        var op1 = popOperand();
+        var op2 = popOperand();
+
+        pushOperand(op1);
+        pushOperand(op2);     
     }
 
     /**
@@ -111,6 +128,10 @@ public class Calc {
      * @throws IllegalStateException if the operand stack is empty
      */
     public void dup() {
-        // TODO
+        if (getOperandCount() == 0) {
+            throw new IllegalStateException("Cannot dup from an empty stack");
+        }        
+        pushOperand(peekOperand());    
+
     }
 }
